@@ -1,0 +1,33 @@
+version: '3.7'
+services:
+  db:
+    image: mysql:5.8
+    ports:
+      - "13306:3306"
+    restart: always
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    environment:
+      MYSQL_DATABASE: sample
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  application:
+    build: .
+    environment:
+      MYSQL_DATABASE: sample
+      MYSQL_HOST: db
+      MYSQL_PASSWORD: password
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+    depends_on:
+      - db
+    ports:
+      - "8080:8000"
+    restart: always
+    volumes:
+      - .:/app
+
+volumes:
+  mysql-data:
+    driver: local
