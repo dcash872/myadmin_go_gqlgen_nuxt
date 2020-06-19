@@ -18,6 +18,8 @@ github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ3
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dcash872/myadmin_go_gqlgen_nuxt v0.0.0-20200619081937-03d945515099 h1:gnhG2AXnAWSkTefJN1+f1CQMfKtkIwRuxnxK42iHKmI=
+github.com/dcash872/myadmin_go_gqlgen_nuxt v0.0.0-20200619102832-0ad19d0c10a3 h1:rVh3XIRPyFUBvYmg4M0DK6iRJA2eb+lMNtv554TDqyE=
+github.com/dcash872/myadmin_go_gqlgen_nuxt v0.0.0-20200619103703-4f63aa7c6e0d h1:BExn43YJlcIdsLq83bUsr3erNAZrns07hC+vxvKkTsk=
 github.com/dgrijalva/jwt-go v1.0.2 h1:KPldsxuKGsS2FPWsNeg9ZO18aCrGKujPoWXn2yo+KQM=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
