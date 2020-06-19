@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   db:
-    image: mysql:5.8
+    image: mysql:5.7
     ports:
       - "13306:3306"
     restart: always
@@ -13,7 +13,7 @@ services:
       - mysql-data:/var/lib/mysql
 
   application:
-    build: .
+    build: ./server-side
     environment:
       MYSQL_DATABASE: sample
       MYSQL_HOST: db
@@ -26,7 +26,7 @@ services:
       - "8080:8000"
     restart: always
     volumes:
-      - .:/app
+      - ./server-side:/app
 
 volumes:
   mysql-data:
