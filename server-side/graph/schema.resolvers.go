@@ -12,7 +12,12 @@ import (
 )
 
 func (r *queryResolver) User(ctx context.Context, id *string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	// panic(fmt.Errorf("not implemented"))
+	name := "James"
+	return &model.User{
+		ID:   id,
+		Name: &name,
+	}, nil
 }
 
 func (r *queryResolver) Pet(ctx context.Context, id *string) (*model.Pet, error) {
