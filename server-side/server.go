@@ -7,8 +7,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/server-side/graph"
-	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/server-side/graph/generated"
+	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/graph"
+	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/graph/generated"
 )
 
 const defaultPort = "8080"

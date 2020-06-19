@@ -7,8 +7,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/server-side/graph/generated"
-	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/server-side/graph/model"
+	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/graph/generated"
+	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/graph/model"
 )
 
 func (r *queryResolver) User(ctx context.Context, id *string) (*model.User, error) {
