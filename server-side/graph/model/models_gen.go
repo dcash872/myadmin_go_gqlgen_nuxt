@@ -2,12 +2,16 @@
 
 package model
 
-type Pet struct {
-	ID   *string `json:"id"`
-	Name *string `json:"name"`
+type NewTask struct {
+	Title string `json:"title"`
+	Note  string `json:"note"`
 }
 
-type User struct {
-	ID   *string `json:"id"`
-	Name *string `json:"name"`
+type Task struct {
+	ID        string `json:"id"`
+	Title     string `json:"title"`
+	Note      string `json:"note"`
+	Completed int    `json:"completed"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }

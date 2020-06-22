@@ -2,17 +2,20 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Query {
-  user(id: ID): User!
-  pet(id: ID): Pet!
+type Task {
+  id: ID!
+  title: String!
+  note: String!
+  completed: Int!
+  created_at: String!
+  updated_at: String!
 }
 
-type User {
-  id: ID
-  name: String
+input NewTask {
+  title: String!
+  note: String!
 }
 
-type Pet {
-  id: ID
-  name: String
+type Mutation {
+  createTask(input: NewTask!): Task!
 }
