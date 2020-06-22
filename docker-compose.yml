@@ -15,7 +15,7 @@ services:
   application:
     build: ./server-side
     environment:
-      MYSQL_DATABASE: sample
+      MYSQL_DATABASE: myadmin
       MYSQL_HOST: db
       MYSQL_PASSWORD: password
       MYSQL_PORT: 3306
