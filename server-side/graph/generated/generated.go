@@ -8,6 +8,7 @@ import (
 	"errors"
 	"strconv"
 	"sync"
+	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
@@ -35,6 +36,7 @@ type Config struct {
 
 type ResolverRoot interface {
 	Mutation() MutationResolver
+	Query() QueryResolver
 }
 
 type DirectiveRoot struct {
@@ -46,6 +48,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		Tasks func(childComplexity int) int
 	}
 
 	Task struct {
@@ -60,6 +63,9 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	CreateTask(ctx context.Context, input model.NewTask) (*model.Task, error)
+}
+type QueryResolver interface {
+	Tasks(ctx context.Context) ([]*model.Task, error)
 }
 
 type executableSchema struct {
@@ -88,6 +94,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateTask(childComplexity, args["input"].(model.NewTask)), true
+
+	case "Query.tasks":
+		if e.complexity.Query.Tasks == nil {
+			break
+		}
+
+		return e.complexity.Query.Tasks(childComplexity), true
 
 	case "Task.completed":
 		if e.complexity.Task.Completed == nil {
@@ -208,6 +221,10 @@ type Task {
   updated_at: String!
 }
 
+type Query {
+  tasks: [Task!]!
+}
+
 input NewTask {
   title: String!
   note: String!
@@ -326,6 +343,40 @@ func (ec *executionContext) _Mutation_createTask(ctx context.Context, field grap
 	res := resTmp.(*model.Task)
 	fc.Result = res
 	return ec.marshalNTask2ᚖgithubᚗcomᚋdcash872ᚋmyadmin_go_gqlgen_nuxtᚋserverᚑsideᚋgraphᚋmodelᚐTask(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_tasks(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Query",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Tasks(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Task)
+	fc.Result = res
+	return ec.marshalNTask2ᚕᚖgithubᚗcomᚋdcash872ᚋmyadmin_go_gqlgen_nuxtᚋserverᚑsideᚋgraphᚋmodelᚐTaskᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1734,6 +1785,20 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
+		case "tasks":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_tasks(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
 		case "__type":
 			out.Values[i] = ec._Query___type(ctx, field)
 		case "__schema":
@@ -2108,6 +2173,43 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 
 func (ec *executionContext) marshalNTask2githubᚗcomᚋdcash872ᚋmyadmin_go_gqlgen_nuxtᚋserverᚑsideᚋgraphᚋmodelᚐTask(ctx context.Context, sel ast.SelectionSet, v model.Task) graphql.Marshaler {
 	return ec._Task(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTask2ᚕᚖgithubᚗcomᚋdcash872ᚋmyadmin_go_gqlgen_nuxtᚋserverᚑsideᚋgraphᚋmodelᚐTaskᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Task) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNTask2ᚖgithubᚗcomᚋdcash872ᚋmyadmin_go_gqlgen_nuxtᚋserverᚑsideᚋgraphᚋmodelᚐTask(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
 }
 
 func (ec *executionContext) marshalNTask2ᚖgithubᚗcomᚋdcash872ᚋmyadmin_go_gqlgen_nuxtᚋserverᚑsideᚋgraphᚋmodelᚐTask(ctx context.Context, sel ast.SelectionSet, v *model.Task) graphql.Marshaler {

@@ -10,31 +10,30 @@ import (
 	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/graph"
 	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/graph/generated"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
-	_, error := gorm.Open(
-		"mymysql",
+	db, err := gorm.Open( // 修正
+		"mysql",
 		fmt.Sprintf(
-			"host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
+			"host=%s port=%d user=%s dbname=%s password=%s",
 			"localhost", 13306, "root", "myadmin", "password",
 		),
 	)
-	if error != nil {
-		log.Fatelln(error)
+	if err != nil {
+		log.Fatalln(err)
 	}
 
-	echo := echo.New()
+	e := echo.New()
 
-	echo.Use(middleware.Logger())
-	echo.Use(middleware.Recover())
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
-	echo.GET("/", welcome())
+	e.GET("/", welcome())
 
-	// GraphQL設定
 	graphqlHandler := handler.NewDefaultServer(
 		generated.NewExecutableSchema(
 			generated.Config{Resolvers: &graph.Resolver{DB: db}},
@@ -42,25 +41,24 @@ func main() {
 	)
 	playgroundHandler := playground.Handler("GraphQL", "/query")
 
-	echo.POST("/query", func(cxt echo.Context) error {
-		graphqlHandler.ServeHTTP(cxt.Response(), cxt.Request())
+	e.POST("/query", func(c echo.Context) error {
+		graphqlHandler.ServeHTTP(c.Response(), c.Request())
 		return nil
 	})
 
-	echo.GET("/playground", func(cxt echo.Context) error {
-		playgroundHandler.ServeHTTP(cxt.Response(), cxt.Request())
+	e.GET("/playground", func(c echo.Context) error {
+		playgroundHandler.ServeHTTP(c.Response(), c.Request())
 		return nil
 	})
 
-	// Echo起動
-	error := echo.Start(":8080")
-	if error != nil {
-		log.Fatalln(error)
+	err = e.Start(":8080")
+	if err != nil {
+		log.Fatalln(err)
 	}
 }
 
 func welcome() echo.HandlerFunc {
-	return func(cxt echo.Context) error {
-		return cxt.String(http.StatusOK, "Welcome!")
+	return func(c echo.Context) error {
+		return c.String(http.StatusOK, "Welcome!")
 	}
 }

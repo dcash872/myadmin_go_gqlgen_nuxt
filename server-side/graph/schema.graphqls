@@ -11,6 +11,10 @@ type Task {
   updated_at: String!
 }
 
+type Query {
+  tasks: [Task!]!
+}
+
 input NewTask {
   title: String!
   note: String!
