@@ -30,7 +30,12 @@ func (r *mutationResolver) CreateTask(ctx context.Context, input model.NewTask) 
 }
 
 func (r *queryResolver) Tasks(ctx context.Context) ([]*model.Task, error) {
-	panic(fmt.Errorf("not implemented"))
+	// panic(fmt.Errorf("not implemented"))
+	tasks := []*model.Task{}
+
+	r.DB.Find(&tasks)
+
+	return tasks, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
