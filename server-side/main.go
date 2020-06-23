@@ -19,8 +19,8 @@ func main() {
 	db, err := gorm.Open( // 修正
 		"mysql",
 		fmt.Sprintf(
-			"host=%s port=%d user=%s dbname=%s password=%s",
-			"localhost", 13306, "root", "myadmin", "password",
+			"%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
+			"root", "password", "localhost", 13306, "myadmin",
 		),
 	)
 	if err != nil {
@@ -51,7 +51,7 @@ func main() {
 		return nil
 	})
 
-	err = e.Start(":8080")
+	err = e.Start(":8020")
 	if err != nil {
 		log.Fatalln(err)
 	}

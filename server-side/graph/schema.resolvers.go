@@ -6,13 +6,27 @@ package graph
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/graph/generated"
 	"github.com/dcash872/myadmin_go_gqlgen_nuxt/server-side/graph/model"
 )
 
 func (r *mutationResolver) CreateTask(ctx context.Context, input model.NewTask) (*model.Task, error) {
-	panic(fmt.Errorf("not implemented"))
+	// panic(fmt.Errorf("not implemented"))
+	now := time.Now().Format("2006-01-02 15:04:05")
+	timestamp := fmt.Sprintf("%s", now)
+
+	task := model.Task{
+		Title:     input.Title,
+		Note:      input.Note,
+		Completed: 0,
+		CreatedAt: timestamp,
+		UpdatedAt: timestamp,
+	}
+	r.DB.Create(&task)
+
+	return &task, nil
 }
 
 func (r *queryResolver) Tasks(ctx context.Context) ([]*model.Task, error) {
